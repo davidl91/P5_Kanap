@@ -195,6 +195,8 @@ function addEventToForm(){
         let address = document.querySelector('#address');
         let city = document.querySelector('#city');
         let email = document.querySelector('#email');
+        let orderproducts = ProductsLS.map(selectproduct => selectproduct.id);
+        let idproducts = orderproducts.filter((x, i) => orderproducts.indexOf(x) === i);
 
         if (regexname.test(firstname.value) == false){
             document.querySelector('#firstNameErrorMsg').innerText = 'Veuillez saisir un prénom valide';
@@ -230,7 +232,7 @@ function addEventToForm(){
                 city: city.value,
                 email: email.value,
                 },
-                products: ProductsLS.map(selectproduct => selectproduct.id),
+                products: idproducts,
             }
             console.log(order)
             fetch("http://localhost:3000/api/products/order/", {
@@ -248,7 +250,7 @@ function addEventToForm(){
             })
             .then(function(data){
                 let orderid = data.orderId;
-                window.location.href = "confirmation.html?orderid="+orderid;
+                //window.location.href = "confirmation.html?orderid="+orderid;
             })
         }
     })
