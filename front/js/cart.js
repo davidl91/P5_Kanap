@@ -250,7 +250,7 @@ function addEventToForm(){
             })
             .then(function(data){
                 let orderid = data.orderId;
-                //window.location.href = "confirmation.html?orderid="+orderid;
+                window.location.href = "confirmation.html?orderid="+orderid;
             })
         }
     })
