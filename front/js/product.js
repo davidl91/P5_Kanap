@@ -31,18 +31,18 @@ function showData(product){
     //Création des éléments du produit
     let imageproduct = document.createElement('img');
 
+    //Contrôle du produit
+    if (product == null){
+        console.log('showData : erreur de paramètre');
+        return;
+    }
+
     //Attribution des valeurs dans les éléments avec les données de l'API
     imageproduct.src = `${product.imageUrl}`;
     imageproduct.alt = `${product.altTxt}`;
     let titleproduct = `${product.name}`;
     let priceproduct = `${product.price}`;
     let descriptionproduct = `${product.description}`;
-
-    //Contrôle du produit
-    if (product == null){
-        console.log('showData : erreur de paramètre');
-        return;
-    }
 
     //Attribution des éléments dans le code HTML
     document.querySelector('.item__img').append(imageproduct);

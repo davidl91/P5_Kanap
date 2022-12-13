@@ -178,7 +178,72 @@ function checkCartEmpty(){
         document.querySelector('.cart__price').style.visibility = 'hidden';
         document.querySelector('.cart__order').style.visibility = 'hidden';
         document.querySelector('h1').innerText = `Votre panier est vide, selectionner des articles à l'accueil`;
-        return false;
+        return true;
+    }
+}
+
+//Fonction pour vérifier la validité du prénom
+function checkFirstName(){
+    let regexname = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+    if (regexname.test(document.querySelector('#firstName').value) == true){
+        return true
+    } else {
+        document.querySelector('#firstNameErrorMsg').innerText = 'Veuillez saisir un prénom valide';
+        setTimeout(function(){
+            document.querySelector('#firstNameErrorMsg').innerText = '';
+        }, 3000);
+    }
+}
+
+//Fonction pour vérifier la validité du nom
+function checkLastName(){
+    let regexname = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+    if (regexname.test(document.querySelector('#lastName').value) == true){
+        return true
+    } else {
+        document.querySelector('#lastNameErrorMsg').innerText = 'Veuillez saisir un nom valide';
+        setTimeout(function(){
+            document.querySelector('#lastNameErrorMsg').innerText = '';
+        }, 3000);
+    }
+}
+
+//Fonction pour vérifier la validité de l'adresse
+function checkAddress(){
+    let regexaddress = /((^[0-9]*).?((BIS)|(TER)|(QUATER))?)?((\W+)|(^))(([a-z]+.)*)([0-9]{5})?.(([a-z\'']+.)*)$/;
+    if (regexaddress.test(document.querySelector('#address').value) == true){
+        return true
+    } else {
+        document.querySelector('#addressErrorMsg').innerText = 'Veuillez saisir une adresse valide';
+        setTimeout(function(){
+            document.querySelector('#addressErrorMsg').innerText = '';
+        }, 3000);
+    }
+}
+
+//Fonction pour vérifier la validité de la ville
+function checkCity(){
+    let regexname = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
+    if (regexname.test(document.querySelector('#city').value) == true){
+        return true
+    } else {
+        document.querySelector('#cityErrorMsg').innerText = 'Veuillez saisir une ville valide';
+        setTimeout(function(){
+            document.querySelector('#cityErrorMsg').innerText = '';
+        }, 3000);
+    }
+}
+
+//Fonction pour vérifier la validité de l'email
+function checkEmail(){
+    let regexemail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    if (regexemail.test(document.querySelector('#email').value) == true){
+        return true
+    } else {
+        document.querySelector('#emailErrorMsg').innerText = 'Veuillez saisir un email valide';
+        setTimeout(function(){
+            document.querySelector('#emailErrorMsg').innerText = '';
+        }, 3000);
     }
 }
 
@@ -187,50 +252,16 @@ function addEventToForm(){
     let cartform = document.querySelector('.cart__order__form');
     cartform.addEventListener('submit', function(event){
         event.preventDefault();
-        let regexname = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
-        let regexaddress = /((^[0-9]*).?((BIS)|(TER)|(QUATER))?)?((\W+)|(^))(([a-z]+.)*)([0-9]{5})?.(([a-z\'']+.)*)$/;
-        let regexemail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-        let firstname = document.querySelector('#firstName');
-        let lastname = document.querySelector('#lastName');
-        let address = document.querySelector('#address');
-        let city = document.querySelector('#city');
-        let email = document.querySelector('#email');
         let orderproducts = ProductsLS.map(selectproduct => selectproduct.id);
         let idproducts = orderproducts.filter((x, i) => orderproducts.indexOf(x) === i);
-
-        if (regexname.test(firstname.value) == false){
-            document.querySelector('#firstNameErrorMsg').innerText = 'Veuillez saisir un prénom valide';
-            setTimeout(function(){
-                document.querySelector('#firstNameErrorMsg').innerText = '';
-            }, 3000);
-        } else if (regexname.test(lastname.value) == false){
-            document.querySelector('#lastNameErrorMsg').innerText = 'Veuillez saisir un nom valide';
-            setTimeout(function(){
-                document.querySelector('#lastNameErrorMsg').innerText = '';
-            }, 3000);
-        } else if (regexaddress.test(address.value) == false){
-            document.querySelector('#addressErrorMsg').innerText = 'Veuillez saisir une adresse valide';
-            setTimeout(function(){
-                document.querySelector('#addressErrorMsg').innerText = '';
-            }, 3000);
-        } else if (regexname.test(city.value) == false){
-            document.querySelector('#cityErrorMsg').innerText = 'Veuillez saisir une ville valide';
-            setTimeout(function(){
-                document.querySelector('#cityErrorMsg').innerText = '';
-            }, 3000);
-        } else if (regexemail.test(email.value) == false){
-            document.querySelector('#emailErrorMsg').innerText = 'Veuillez saisir un email valide';
-            setTimeout(function(){
-                document.querySelector('#emailErrorMsg').innerText = '';
-            }, 3000);
-        } else {
+        if (checkFirstName() && checkLastName() && checkAddress() && checkCity() && checkEmail()){
             let order = {
                 contact: {
-                firstName: firstname.value,
-                lastName: lastname.value,
-                address: address.value,
-                city: city.value,
-                email: email.value,
+                firstName: document.querySelector('#firstName').value,
+                lastName: document.querySelector('#lastName').value,
+                address: document.querySelector('#address').value,
+                city: document.querySelector('#city').value,
+                email: document.querySelector('#email').value,
                 },
                 products: idproducts,
             }
@@ -243,14 +274,22 @@ function addEventToForm(){
                 },
                 body: JSON.stringify(order),
             })
+            //Fonction pour interroger url
             .then(function(response){
                 if (response.ok){
                     return response.json();
                 }
             })
+            //Fonction de récupération de la réponse
             .then(function(data){
                 let orderid = data.orderId;
                 window.location.href = "confirmation.html?orderid="+orderid;
+            })
+            //Fonction pour récupérer les erreurs
+            .catch(function(err){
+                let cartproduct = document.querySelector('#cart__items');
+                cartproduct.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
+                console.log('addEventToForm : erreur de paramètre', err);
             })
         }
     })
@@ -261,7 +300,7 @@ addEventToForm();
 function main(){
     let url="http://localhost:3000/api/products/";
     ProductsLS=getCartProducts();
-    if (checkCartEmpty() != false){
+    if (checkCartEmpty() != true){
         getDatasFromAPI(url);
     }
 }
