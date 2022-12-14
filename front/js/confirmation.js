@@ -4,9 +4,16 @@ function getIdOrderFromUrl(){
     let urlorder = new URLSearchParams(window.location.search)
     return urlorder.get('orderid')
 }
-getIdOrderFromUrl();
+
 //Fonction pour afficher l'ID de la commande
-function showOrderID(){
-    document.querySelector('#orderId').innerText = getIdOrderFromUrl();
+function showOrderID(id){
+    document.querySelector('#orderId').innerText = id;
 }
-showOrderID();
+
+//Fonction main de l'API
+function main(){
+    let id = getIdOrderFromUrl;
+    showOrderID(id);
+}
+main();
+

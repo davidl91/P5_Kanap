@@ -2,21 +2,21 @@
 function getDatasFromAPI(url){
     fetch(url)
     //Fonction pour interroger url
-    .then(function(response){
-    if (response.ok){
-        return response.json();
-    }
-    })
-    //Fonction de récupération de la réponse
-    .then(function(products){
-        showDatas(products);
-    })
-    //Fonction pour récupérer les erreurs
-    .catch(function(err){
-        let sectionproducts = document.querySelector('#items');
-        sectionproducts.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
-        console.log('getDatasFromAPI : erreur de paramètre', err);
-    });
+        .then(function(response){
+            if (response.ok){
+                return response.json();
+            }
+        })
+        //Fonction de récupération de la réponse
+        .then(function(products){
+            showDatas(products);
+        })
+        //Fonction pour récupérer les erreurs
+        .catch(function(err){
+            let sectionproducts = document.querySelector('#items');
+            sectionproducts.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
+            console.log('getDatasFromAPI : erreur de paramètre', err);
+        });
 }
 
 //Fonction pour récupérer des données de la réponse avec une boucle

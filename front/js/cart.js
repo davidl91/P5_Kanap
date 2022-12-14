@@ -1,34 +1,44 @@
 let ProductsLS;
 let ProductsAPI;
 
-//Fonction pour effectuer des requêtes HTTP depuis l'API
-function getDatasFromAPI(url){
-    fetch(url)
-    //Fonction pour interroger url
-    .then(function(response){
-    if (response.ok){
-        return response.json();
-    }
-    })
-    //Fonction de récupération de la réponse
-    .then(function(products){
-        ProductsAPI = products;
-        showSelectProduct();
-    })
-    //Fonction pour récupérer les erreurs
-    .catch(function(err){
-        let cartproduct = document.querySelector('#cart__items');
-        cartproduct.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
-        console.log('getDatasFromAPI : erreur de paramètre', err);
-    })
-}
-
 //Fonction pour récupérer les données dans le LocalStorage
 function getCartProducts(){
     let cartproducts = localStorage.getItem('cartproducts');
     if (cartproducts != undefined && cartproducts != '[]'){
         return JSON.parse(cartproducts);
     }
+}
+
+//Fonction pour vérifier si le panier est vide
+function checkCartEmpty(){
+    if (ProductsLS === undefined || ProductsLS === '[]'){
+        document.querySelector('.cart__price').style.visibility = 'hidden';
+        document.querySelector('.cart__order').style.visibility = 'hidden';
+        document.querySelector('h1').innerText = `Votre panier est vide, selectionner des articles à l'accueil`;
+        return true;
+    }
+}
+
+//Fonction pour effectuer des requêtes HTTP depuis l'API
+function getDatasFromAPI(url){
+    fetch(url)
+    //Fonction pour interroger url
+        .then(function(response){
+            if (response.ok){
+                return response.json();
+            }
+        })
+        //Fonction de récupération de la réponse
+        .then(function(products){
+            ProductsAPI = products;
+            showSelectProduct();
+        })
+        //Fonction pour récupérer les erreurs
+        .catch(function(err){
+            let cartproduct = document.querySelector('#cart__items');
+            cartproduct.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
+            console.log('getDatasFromAPI : erreur de paramètre', err);
+        })
 }
 
 //Fonction pour afficher les produits du panier depuis le LocalStorage
@@ -172,16 +182,6 @@ function getPriceProducts(){
     })
 }
 
-//Fonction pour vérifier si le panier est vide
-function checkCartEmpty(){
-    if (ProductsLS === undefined || ProductsLS === '[]'){
-        document.querySelector('.cart__price').style.visibility = 'hidden';
-        document.querySelector('.cart__order').style.visibility = 'hidden';
-        document.querySelector('h1').innerText = `Votre panier est vide, selectionner des articles à l'accueil`;
-        return true;
-    }
-}
-
 //Fonction pour vérifier la validité du prénom
 function checkFirstName(){
     let regexname = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
@@ -299,7 +299,7 @@ addEventToForm();
 //Fonction main de l'API
 function main(){
     let url="http://localhost:3000/api/products/";
-    ProductsLS=getCartProducts();
+    ProductsLS = getCartProducts();
     if (checkCartEmpty() != true){
         getDatasFromAPI(url);
     }

@@ -1,28 +1,28 @@
 //Fonction pour récupérer l'ID du produit
 function getIdProductFromUrl(){
-    let urlproduct = new URLSearchParams(window.location.search)
-    return urlproduct.get('id')
+    let urlproduct = new URLSearchParams(window.location.search);
+    return urlproduct.get('id');
 }
 
 //Fonction pour effectuer des requêtes HTTP depuis l'API
 function getDatasFromAPI(url){
     fetch(url)
-    //Fonction pour interroger url
-    .then(function(response){
-    if (response.ok){
-        return response.json();
-    }
-    })
-    //Fonction de récupération de la réponse
-    .then(function(product){
-        showData(product); 
-    })
-    //Fonction pour récupérer les erreurs
-    .catch(function(err){
-        let sectionproduct = document.querySelector('.item');
-        sectionproduct.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
-        console.log('getDatasFromAPI : erreur de paramètre', err);
-    });
+        //Fonction pour interroger url
+        .then(function(response){
+            if (response.ok){
+                return response.json();
+            }
+        })
+        //Fonction de récupération de la réponse
+        .then(function(product){
+            showData(product); 
+        })
+        //Fonction pour récupérer les erreurs
+        .catch(function(err){
+            let sectionproduct = document.querySelector('.item');
+            sectionproduct.innerHTML = 'Une erreur est survenue, veuillez réessayer plus tard';
+            console.log('getDatasFromAPI : erreur de paramètre', err);
+        });
 }
 
 //Fonction pour afficher les éléments du produit
@@ -60,19 +60,31 @@ function showData(product){
     }
 }
 
-//Fonction pour récupérer les données du produit
-function addEventToButtonCart(){
-
-    //Création d'une alerte pour les erreurs
+//Fonction pour créer la division du message dans l'html
+function message(){
     let alertaddcart = document.createElement('div');
     alertaddcart.classList.add('alertcart');
     alertaddcart.style.margin = 'auto';
     alertaddcart.style.marginTop = '15px';
     alertaddcart.style.height = '0px';
-    alertaddcart.style.fontWeight = '700';
+    alertaddcart.style.fontWeight = '600';
     document.querySelector('.item__content').append(alertaddcart);
+}
+message();
 
-    //Récupération des éléments du produit
+//Fonction pour afficher le message
+function showMessage(type, message){
+    document.querySelector('.alertcart').style.color = type;
+    document.querySelector('.alertcart').innerText = message;
+    setTimeout(function(){
+        document.querySelector('.alertcart').innerText = ``;
+    }, 2000);
+}
+
+//Fonction pour récupérer les données du produit
+function addEventToButtonCart(){
+
+    //Récupération de l'élément bouton
     let buttoncart = document.querySelector('#addToCart');
 
     //Écoute de l'évènement "click" sur le bonton "Ajouter au panier"
@@ -87,18 +99,10 @@ function addEventToButtonCart(){
             }, 2000);
         }
         else if (selectquantity.value < 1 || selectquantity.value > 100){
-            alertaddcart.innerText = `Sélectionner une quantité entre 1 et 100`;
-            alertaddcart.style.color = 'red';
-            setTimeout(function(){
-                alertaddcart.innerText = ``;
-            }, 2000);
+            showMessage('red', `Sélectionner une quantité entre 1 et 100`);
         }
         else {
-            alertaddcart.innerText = `Article(s) ajouter au panier`;
-            alertaddcart.style.color = 'green';
-            setTimeout(function(){
-                alertaddcart.innerText = ``;
-            }, 2000);
+            showMessage('green', `Article(s) ajouter au panier`);
             addToCart();
         }
     })
@@ -119,12 +123,6 @@ function createSelectProduct(){
 function getLocalStorage(){
     let cartstorage = localStorage.getItem('cartproducts');
     return cartstorage === null ? [] : JSON.parse(cartstorage);
-    if (cartstorage === null){
-        return [];
-    }
-    else {
-        return JSON.parse(cartstorage);
-    } 
 }
 
 //Fonction pour stocker les données du produit dans le LocalStorage
@@ -144,7 +142,7 @@ function addToCart(){
             let qty=JSON.parse(searchproduct.quantity) + JSON.parse(selectproduct.quantity);
             searchproduct.quantity = qty > 100 ? 100 : qty;
             if (qty > 100) {
-                document.querySelector('.alertcart').innerText = 'Vous avez déja une quantité de 100 articles dans votre panier';
+                showMessage('red', `Vous avez déja une quantité de 100 articles dans votre panier`);
             }
         }
     }
