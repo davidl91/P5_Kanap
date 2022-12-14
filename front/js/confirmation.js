@@ -12,7 +12,7 @@ function showOrderID(id){
 
 //Fonction main de l'API
 function main(){
-    let id = getIdOrderFromUrl;
+    let id = getIdOrderFromUrl();
     showOrderID(id);
 }
 main();
